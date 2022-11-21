@@ -7,6 +7,7 @@
 
 ## Dependencies
 - node:16-alpine3.16 (image)
+- nestjs
 - @nestjs/microservices
 - ioredis
 
