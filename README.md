@@ -1,6 +1,10 @@
 # nestjs-microservice-redis
 [Nestjs microservice](https://docs.nestjs.com/microservices/redis) use the Redis transporter implements the publish/subscribe messaging paradigm and leverages the Pub/Sub feature of Redis.
 
+Architecture with REDIS transport in this project
+
+![Architecture Microservices in Nestjs](./architecture.png?raw=true)
+
 ## Requirements
 1. Docker
 2. DockerDocker-Compose
