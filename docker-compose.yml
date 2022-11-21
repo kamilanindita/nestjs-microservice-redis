@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+    api_gateway:
+        container_name: api_gateway
+        image: api-gateway:1.0.0
+        build:
+            context: ./api-gateway
+            target: production
+            dockerfile: ./Dockerfile
+        command: npm run start:prod
+        networks:
+            - nestjs-microservice-tcp
+        restart: unless-stopped
+        env_file: .env
+        ports:
+            - 3000:3000
+        depends_on:
+            - redisdb
+
+    customer_service:
+        container_name: api_customer_service
+        image: api-customer-services:1.0.0
+        build:
+            context: ./customer-service
+            target: production
+            dockerfile: ./Dockerfile
+        command: npm run start:prod
+        networks:
+            - nestjs-microservice-tcp
+        restart: unless-stopped
+        env_file: ./customer-service/.env.prod
+        depends_on:
+            - redisdb
+
+    book_service:
+        container_name: api_book_service
+        image: api-book-services:1.0.0
+        build:
+            context: ./book-service
+            target: production
+            dockerfile: ./Dockerfile
+        command: npm run start:prod
+        networks:
+            - nestjs-microservice-tcp
+        restart: unless-stopped
+        env_file: ./book-service/.env.prod
+        depends_on:
+            - redisdb
+
+    redisdb:
+        image: redis:6.2-alpine
+        container_name: redis_based_microservices
+        restart: unless-stopped
+        command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+        volumes: 
+        - ./redis/data:/data
+        networks:
+            - nestjs-microservice-tcp
+        env_file: .env
+
+
+networks:
+    nestjs-microservice-tcp:
